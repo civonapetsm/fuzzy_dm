@@ -1,5 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import time
+
+#start = time.time()
+#print("hello")
 
 Mext=10**-2                               #masa homogene pozadine
 R=1.1                                     #radijus homogene pozadine
@@ -15,7 +19,7 @@ L0=np.sqrt(r0+(Mext/R**3)*r0**4-e*r0**3)  #redukovani moment impulsa u poèetnom 
 fitacka0=L0/r0**2                         #fi taèka u poèetnom trenutku  
 
 d=1
-n=2                                       
+n=4                                       
 m=0
 
 if (n==4):
@@ -36,11 +40,11 @@ ldL=[]
 lE=[]
 ldE=[]
 
-T=500*d
+T=5000*d
 dt=0.005
 lt=np.arange(0,T,dt)
 
-for i in range(len(lt)):
+for i in range(len(lt)-1):
     
     #resavamo 2 diferencijalne jednacine RK4 metodom:
     #r2tacka-r*fitacka**2=-1/r**2-*Mext*r/R**3+4*np.pi*lam*p*r*cos(2*w*t)
@@ -96,30 +100,44 @@ for i in range(len(lt)):
     
     #takodje u svakom koraku racunamo vrednost momenta impulsa i energije
     
-    L=r**2*fitacka
-    lL.append(L)
-      
-    E=0.5*rtacka**2+L**2/(2*r**2)-1/r+q*Mext*(r**2-3*R**2)/(2*R**3)
-    lE.append(E)
-
-
 plt.plot(lx,ly)
 plt.show()
-plt.plot(lr)
+
+plt.plot(lt,lr)
 plt.show()
 
-for i in range(len(lE)):
-    
-    #racunamo relativnu promenu momenta impulsa i energije
-    
-    dL=lL[i]/lL[0]
-    ldL.append(dL)
-    
-    dE=lE[i]/lE[0]
-    ldE.append(dE)
+lrt=[]
 
-plt.plot(ldE)
-plt.show()
+for i in range(len(lr)-1):
+    
+    rtr=lr[i]
+    rtt=lt[i]
+    lrt.append((rtt,rtr))
+            
+lrtmax=[]
 
-plt.plot(ldL)
-plt.show()
+for i in range (len(lrt)-2):
+    
+    if (lrt[i][1]<=lrt[i+1][1]) and (lrt[i+1][1]>=lrt[i+2][1]):
+        lrtmax.append(lrt[i+1])
+        
+lrtmax2=[]
+for i in range (len(lrtmax)-2):
+    
+    if (lrtmax[i][1]<=lrtmax[i+1][1]) and (lrtmax[i+1][1]>=lrtmax[i+2][1]):
+        lrtmax2.append(lrtmax[i+1])
+                
+lrtmax3=[]
+for i in range (len(lrtmax2)-2):
+    
+    if (lrtmax2[i][1]<=lrtmax2[i+1][1]) and (lrtmax2[i+1][1]>=lrtmax2[i+2][1]):
+        lrtmax3.append(lrtmax2[i+1]) 
+ 
+A=max(lr)
+print(A)
+       
+P=lrtmax3[1][0]-lrtmax3[1][1] 
+print(P)      
+#end = time.time()
+#print(end - start)
+
