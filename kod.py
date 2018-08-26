@@ -106,8 +106,6 @@ plt.show()
 plt.plot(lt,lr)
 plt.show()
 
-A=max(lr)
-
 lrt=[]
 
 for i in range(len(lr)-1):
@@ -134,7 +132,12 @@ for i in range (len(lrtmax2)-2):
     
     if (lrtmax2[i][1]<=lrtmax2[i+1][1]) and (lrtmax2[i+1][1]>=lrtmax2[i+2][1]):
         lrtmax3.append(lrtmax2[i+1]) 
-        
+ 
+A=max(lr)
+print(A)
+       
+P=lrtmax3[1][0]-lrtmax3[1][1] 
+print(P)      
 #end = time.time()
 #print(end - start)
 
