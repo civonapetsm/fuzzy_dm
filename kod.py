@@ -8,15 +8,15 @@ import time
 Mext=10**-2                               #masa homogene pozadine
 R=1.1                                     #radijus homogene pozadine
 p=Mext/(4/3*R**3*np.pi)                   #gustina homogene pozadine
-lam=0.3                                   #udeo ULA u homogenoj pozadini (ukljuèivanje/iskljuèivanje oscilujuæe komponente)
-q=1                                       #ukljuèivanje/iskljuèivanje homogene pozadine
+lam=0.3                                   #udeo ULA u homogenoj pozadini (ukljuÃ¨ivanje/iskljuÃ¨ivanje oscilujuÃ¦e komponente)
+q=1                                       #ukljuÃ¨ivanje/iskljuÃ¨ivanje homogene pozadine
 
-r0=1                                      #radijus orbite tela u poèetnom trenutku
-rtacka0=0                                 #prvi izvod radijusa u poèetnom trenutku                             
-fi0=0                                     #fi koordinata u poèetnom trenutku
+r0=1                                      #radijus orbite tela u poÃ¨etnom trenutku
+rtacka0=0                                 #prvi izvod radijusa u poÃ¨etnom trenutku                             
+fi0=0                                     #fi koordinata u poÃ¨etnom trenutku
 e=0                                       #vrednost prvog izvoda efektivnog potencijala
-L0=np.sqrt(r0+(Mext/R**3)*r0**4-e*r0**3)  #redukovani moment impulsa u poèetnom trenutku     
-fitacka0=L0/r0**2                         #fi taèka u poèetnom trenutku  
+L0=np.sqrt(r0+(Mext/R**3)*r0**4-e*r0**3)  #redukovani moment impulsa u poÃ¨etnom trenutku     
+fitacka0=L0/r0**2                         #fi taÃ¨ka u poÃ¨etnom trenutku  
 
 d=1
 n=4                                       
@@ -91,7 +91,7 @@ for i in range(len(lt)-1):
     fitacka=lfitacka[i]+(k1_fitacka+2*k2_fitacka+2*k3_fitacka+k4_fitacka)/6
     lfitacka.append(fitacka)
     
-    #iyracunavamo odgovarajucu x i y koordinatu da bi smo mogle da plotujemo orbite
+    #izracunavamo odgovarajucu x i y koordinatu da bi smo mogle da plotujemo orbite
     
     x=r*np.cos(fi)
     lx.append(x)
@@ -100,44 +100,31 @@ for i in range(len(lt)-1):
     
     #takodje u svakom koraku racunamo vrednost momenta impulsa i energije
     
+    L=r**2*fitacka
+    lL.append(L)
+      
+    E=0.5*rtacka**2+L**2/(2*r**2)-1/r+q*Mext*(r**2-3*R**2)/(2*R**3)
+    lE.append(E)
+    
 plt.plot(lx,ly)
 plt.show()
 
 plt.plot(lt,lr)
 plt.show()
 
-lrt=[]
+for i in range(len(lE)):
+    
+    #racunamo relativnu promenu momenta impulsa i energije
+    
+    dL=lL[i]/lL[0]
+    ldL.append(dL)
+    
+    dE=lE[i]/lE[0]
+    ldE.append(dE)
 
-for i in range(len(lr)-1):
-    
-    rtr=lr[i]
-    rtt=lt[i]
-    lrt.append((rtt,rtr))
-            
-lrtmax=[]
+plt.plot(ldE)
+plt.show()
 
-for i in range (len(lrt)-2):
-    
-    if (lrt[i][1]<=lrt[i+1][1]) and (lrt[i+1][1]>=lrt[i+2][1]):
-        lrtmax.append(lrt[i+1])
-        
-lrtmax2=[]
-for i in range (len(lrtmax)-2):
-    
-    if (lrtmax[i][1]<=lrtmax[i+1][1]) and (lrtmax[i+1][1]>=lrtmax[i+2][1]):
-        lrtmax2.append(lrtmax[i+1])
-                
-lrtmax3=[]
-for i in range (len(lrtmax2)-2):
-    
-    if (lrtmax2[i][1]<=lrtmax2[i+1][1]) and (lrtmax2[i+1][1]>=lrtmax2[i+2][1]):
-        lrtmax3.append(lrtmax2[i+1]) 
- 
-A=max(lr)
-print(A)
-       
-P=lrtmax3[1][0]-lrtmax3[1][1] 
-print(P)      
-#end = time.time()
-#print(end - start)
+plt.plot(ldL)
+plt.show()
 
